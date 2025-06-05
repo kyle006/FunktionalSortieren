@@ -351,36 +351,6 @@ List<Country> streamSortiertMehrstufig = laenderFuerDemo.stream()
                         .thenComparing(Country::getAreaInSquareKm, Comparator.reverseOrder()))
         .collect(java.util.stream.Collectors.toList());
 ```
-
-### 7. Best Practices und Empfehlungen
-
-#### Einsatzgebiete der Sortiermechanismen:
-
-1.  **`Comparable` (Natürliche Sortierung)**:
-    *   Empfiehlt sich für die primäre, intuitivste Sortierlogik einer Klasse (z.B. `Country` nach Ländernamen).
-    *   Sinnvoll, wenn eine einzige, klare natürliche Ordnung existiert.
-    *   Wichtig ist die Konsistenz mit `equals()`: Wenn `x.compareTo(y) == 0` gilt, sollte auch `x.equals(y)` wahr sein, um unerwartetes Verhalten in sortierten Datenstrukturen wie `SortedSet` zu vermeiden.
-
-2.  **`Comparator` (Flexible Sortierung)**:
-    *   Unverzichtbar für sämtliche alternativen Sortierkriterien.
-    *   Nötig, wenn diverse Sortierperspektiven erforderlich sind (z.B. die `Country`-Objekte mal nach Einwohnerzahl, mal nach Fläche oder Kontinent zu ordnen).
-    *   Die Wahl, wenn die zu sortierende Klasse nicht modifizierbar ist (z.B. Klassen aus Drittbibliotheken) oder ihre natürliche Ordnung nicht verändert werden soll.
-    *   Ermöglicht eine dezidierte Handhabung von `null`-Werten mittels `Comparator.nullsFirst()` oder `Comparator.nullsLast()`.
-
-3.  **Stilvarianten bei der `Comparator`-Implementierung**:
-    *   **Statische Konstanten innerhalb der Datenklasse** (wie `Country.BY_POPULATION_ASC`): Eignen sich hervorragend für häufig genutzte, klar umrissene Sortierkriterien, die eng mit der Klasse verbunden sind. Dies fördert die Wiederverwendbarkeit und Lesbarkeit des Codes.
-    *   **Separate Klassen** (wie `SortByContinentThenPopulationDesc`): Vorteilhaft für komplexe, eventuell zustandsbehaftete (obwohl für Comparatoren selten) oder sehr ausführliche Sortierlogiken, die eine klare Abgrenzung wünschenswert machen.
-    *   **Lambda-Ausdrücke und Methodenreferenzen**: Ideal für bündige, präzise Sortierlogiken, insbesondere im Zusammenspiel mit den `Comparator`-Hilfsmethoden (`comparing`, `thenComparing`). Führen oft zu modernerem und besser lesbarem Code.
-    *   **Anonyme innere Klassen**: Waren vor Java 8 gebräuchlich und wurden seither oft durch Lambda-Ausdrücke abgelöst. Sie behalten ihre Nützlichkeit, falls ein `Comparator` einen internen Zustand verwalten oder mehrere Methoden des Interfaces implementieren müsste (was bei `Comparator` jedoch nicht der Fall ist, da es ein funktionales Interface ist).
-
-#### Hinweise zur Performance:
-
-1.  **Boxing/Unboxing meiden**: Durch die Nutzung von `Comparator.comparingInt()`, `comparingLong()`, `comparingDouble()` für primitive Typen wird die automatische Umwandlung in Wrapper-Objekte (und zurück) vermieden, was die Performance positiv beeinflussen kann.
-2.  **Effiziente Schlüsselextraktion**: Die Funktionen, die an `Comparator.comparing()` übergeben werden (z.B. `Country::getName`), sollten performant sein und keine aufwendigen Berechnungen durchführen.
-3.  **Stabilität berücksichtigen**: Ist die Beibehaltung der relativen Reihenfolge für Elemente, die als gleich eingestuft werden, von Bedeutung, muss ein stabiler Sortieralgorithmus zum Einsatz kommen. TimSort, der Standard für Objekte, erfüllt diese Anforderung.
-4.  **Einmaliges Sortieren bevorzugen**: Wird eine sortierte Datenmenge mehrfach benötigt, ist es in der Regel effizienter, diese einmalig zu sortieren und das Ergebnis zwischenzuspeichern, anstatt die Sortierung bei jeder Verwendung erneut durchzuführen.
-5.  **`List.sort(comparator)` vs. `Collections.sort(list, comparator)`**: Die seit Java 8 verfügbare Methode `list.sort(comparator)` wird oft wegen ihrer direkten Anwendbarkeit auf das Listenobjekt bevorzugt. Intern greifen beide auf vergleichbare Sortiermechanismen zurück.
-
 ## Fazit
 
 Java stellt ein durchdachtes und vielseitiges Framework für Sortieroperationen bereit. Die Symbiose aus `Comparable` für eine natürliche Grundordnung und `Comparator` für anwendungsspezifische Sortierkriterien erlaubt es Entwicklern, nahezu jede erdenkliche Sortieranforderung zu realisieren. Die zugrundeliegenden, hochentwickelten Algorithmen wie TimSort (für Objekte) und Dual-Pivot Quicksort (für primitive Typen) garantieren eine robuste Leistung für ein breites Spektrum von Anwendungsfällen. Mit der Einführung von Lambda-Ausdrücken und den funktionalen Erweiterungen des `Comparator`-Interfaces in Java 8 wurde die Definition von Sortierlogiken zusätzlich vereinfacht und die Eleganz des Codes gesteigert.
