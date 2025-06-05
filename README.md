@@ -3,7 +3,7 @@
 ## Überblick
 Dieses Projekt dient als praktische Demonstration verschiedener Sortierstrategien in Java. Im Mittelpunkt steht die Klasse `Country`, welche Länder anhand diverser Merkmale wie Name, Kontinent, Einwohnerzahl, Fläche, UN-Beitrittsdatum und Landessprachen abbildet. Die Ausführungen illustrieren die Anwendung der natürlichen Sortierreihenfolge (`Comparable`), der umgekehrten Sortierung sowie mannigfaltiger `Comparator`-Implementierungen.
 
-Zur Erzeugung der notwendigen Testdaten für die `Country`-Instanzen kommt die Klasse `DataGenerator` zum Einsatz. Diese bedient sich der [Instancio](https://www.instancio.org/) Bibliothek, um eine flexible und nachvollziehbare Generierung von Datensätzen zu gewährleisten.
+Zur Erzeugung der notwendigen Testdaten für die `Country`-Instanzen kommt die Klasse `DataGenerator` zum Einsatz. Diese bedient sich der [Instancio](https://www.instancio.org/) Bibliothek, um eine flexible und nachvollziehbare Generierung von Datensätzen zu gewährleisten. Zum die App laufen zu lassen kann man in IntelliJ einfach in der MainApp.Java Klasse die applikation starten. Die Daten werden generiert und auch sortiert dann in der Konsole ausgegeben.
 
 ## Wie funktioniert Java's Sortierung im Detail?
 
