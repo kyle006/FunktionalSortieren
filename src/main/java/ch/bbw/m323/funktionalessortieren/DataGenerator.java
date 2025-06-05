@@ -29,6 +29,18 @@ public class DataGenerator {
             "Lahnda", "Koreanisch", "Italienisch", "Türkisch", "Niederländisch", "Polnisch"
     );
 
+    // Ergänzung zu DataGenerator.java
+
+    private static final String[] SILBEN = {"Al", "ba", "ri", "on", "ta", "la", "ni", "ra", "do", "va", "lo", "sa"};
+    private static final String[] ENDUNGEN = {"ien", "land", "stan", "tan", "mark"};
+
+    private static String generiereSchoenenNamen(Random random) {
+        String name = SILBEN[random.nextInt(SILBEN.length)] +
+                SILBEN[random.nextInt(SILBEN.length)] +
+                ENDUNGEN[random.nextInt(ENDUNGEN.length)];
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+
     static {
         RANDOM_GENERATOR.setSeed(FIXED_SEED);
     }
@@ -41,7 +53,7 @@ public class DataGenerator {
 
         Model<Country> countryModel = Instancio.of(Country.class)
                 .withSettings(instancioSettings)
-                .generate(Select.field(Country::getName), gen -> gen.text().pattern("#C#a#a#a#a#a #a#a#a#a").nullable())
+                .supply(Select.field(Country::getName), random -> generiereSchoenenNamen(RANDOM_GENERATOR))
                 .supply(Select.field(Country::getContinent), random -> Continent.values()[RANDOM_GENERATOR.nextInt(Continent.values().length)])
                 .generate(Select.field(Country::getPopulation), gen -> gen.longs().min(500_000L).max(1_400_000_000L))
                 .supply(Select.field(Country::getAreaInSquareKm), random -> (double) (RANDOM_GENERATOR.nextLong(100_000, 17_000_000_000L)) / 100.0)
@@ -84,4 +96,4 @@ public class DataGenerator {
 
         countries.stream().limit(5).forEach(c -> System.out.println("Sprachen für " + c.getName() + ": " + c.getNationalLanguages()));
     }
-} 
+}
